@@ -15,7 +15,7 @@ func main() {
 	dir=os.Args[1]
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		f, err := os.Create(dir+time.Now().Format("2006-01-02_15.04.05_000000000")+".hook")
+		f, err := os.Create(dir+time.Now().Format("2006-01-02_15.04.05.000000000")+".hook")
 		defer f.Close()
 		requestDump, err := httputil.DumpRequest(r, true)
 		if err != nil {

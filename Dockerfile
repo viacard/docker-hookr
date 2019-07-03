@@ -9,4 +9,7 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 COPY --from=builder /go/src/hookr .
 EXPOSE 8080
-CMD ["./main", "/tmp"] 
+VOLUME ["/data"]
+
+ENTRYPOINT ["./hookr"]
+CMD ["/data/"]
