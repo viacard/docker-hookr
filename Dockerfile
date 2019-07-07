@@ -1,15 +1,18 @@
 FROM golang:latest AS builder
+LABEL maintainer "mats@viacard.com"
+
 WORKDIR /go/src
 COPY main.go /go/src/
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /go/src/hookr .
-RUN find /go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -a -o /go/bin/hookr .
 
-FROM alpine:latest  
-RUN apk --no-cache add ca-certificates
-WORKDIR /root/
-COPY --from=builder /go/src/hookr .
+FROM scratch
+COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /etc/group /etc/group
+COPY --from=builder /go/bin/hookr /go/bin/hookr
+
+USER nobody
 EXPOSE 8080
 VOLUME ["/data"]
 
-ENTRYPOINT ["./hookr"]
+ENTRYPOINT ["/go/bin/hookr"]
 CMD ["/data/"]
