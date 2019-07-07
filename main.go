@@ -22,7 +22,7 @@ import (
 func main() {
 	dir := "."
 	if len(os.Args) > 1 {
-		dir := os.Args[1]
+		dir = os.Args[1]
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
